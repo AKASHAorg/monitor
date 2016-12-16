@@ -1,10 +1,11 @@
 {
-  "name": "monitor",
+  "name": "akasha-profiles-monitor",
   "version": "1.0.0",
   "description": "AKASHA contract events watcher",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "GETH_IPC_PATH=~/.ethereum/akasha-alpha/geth.ipc IPFS_API_ADDRESS=/ip4/127.0.0.1/tcp/5001 node dist/index.js"
   },
   "repository": {
     "type": "git",
@@ -17,10 +18,11 @@
   },
   "homepage": "https://github.com/AkashaProject/monitor#readme",
   "dependencies": {
-    "@akashaproject/contracts.js": "^1.2.10",
-    "ipfs-api": "^12.1.0",
-    "tty-table": "^2.2.5",
-    "web3": "^0.17.0-beta"
+    "@akashaproject/contracts.js": "1.2.11",
+    "ipfs-api": "12.1.0",
+    "lodash.debounce": "^4.0.8",
+    "tty-table": "2.2.5",
+    "web3": "0.17.0-beta"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",

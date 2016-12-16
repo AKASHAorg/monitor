@@ -7,6 +7,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = function () {
     var _web3API = null;
     var _ipfsAPI = null;
+
     var _connectWeb3 = function _connectWeb3() {
         var web3 = new _web2.default();
         var socket = new _net2.default.Socket();
@@ -15,22 +16,21 @@ exports.default = function () {
         socket.setEncoding('utf8');
         web3.setProvider(new _web2.default.providers.IpcProvider(ipcPath, socket));
         _web3API = web3;
-        table.push(['GETH', 'OK']);
     };
 
     var _connectIpfs = function _connectIpfs() {
         var ipfsApiPath = process.env.IPFS_API_ADDRESS ? process.env.IPFS_API_ADDRESS : '/ip4/127.0.0.1/tcp/5001';
         _ipfsAPI = (0, _ipfsApi2.default)(ipfsApiPath);
-        table.push(['IPFS', 'OK']);
     };
+
     var get = function get() {
         return { web3API: _web3API, ipfsAPI: _ipfsAPI };
     };
     var connect = function connect(service) {
         _connectWeb3();
         _connectIpfs();
-        console.log(table.toString());
     };
+
     var getIpfs = function getIpfs(ipfsHashChunks) {
         return _web3API.toUtf8(ipfsHashChunks[0]) + _web3API.toUtf8(ipfsHashChunks[1]);
     };
@@ -50,11 +50,4 @@ var _ipfsApi = require('ipfs-api');
 var _ipfsApi2 = _interopRequireDefault(_ipfsApi);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var Table = require('tty-table/automattic-cli-table');
-var chalk = require('chalk');
-
-var table = new Table({
-    head: ['Service', 'Status']
-});
 //# sourceMappingURL=connection.service.js.map
