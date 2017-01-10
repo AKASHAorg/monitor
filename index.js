@@ -28,23 +28,37 @@ const tail = () => {
     const run = () => {
         const factory = new contracts.Class(logsConnection.get().web3API);
         const watcher = factory.objects.registry.Register({}, {fromBlock: lastRecord.fromBlock, toBlock: 'latest'});
+        logsConnection.get().web3API.eth.defaultAccount = process.env.BOT_ADDR;
+
         watcher.watch((err, registered) => {
             currentBlock = registered.blockNumber;
             let profile = factory.classes.Profile.at(registered.args.profile);
+            const reqFollow = factory.objects.feed.follow.request(registered.args.id, {gas: 500000}); //reqFollow.params[0]
             profile._hash.call(0, (err0, firstPart) => {
                 profile._hash.call(1, (err1, secondPart) => {
+                    logsConnection.get().web3API
+                        .personal
+                        .sendTransaction(reqFollow.params[0], process.env.BOT_PWD, (err, data) =>{
+                            console.log('tx for following ', registered.args.id, err, data);
+                        });
                     if (!err0 && !err1) {
                         const resource = logsConnection.getIpfs([firstPart, secondPart]);
+                        console.log(resource, registered.args.profile);
                         logsConnection.get().ipfsAPI.object.get(resource, (errFinal, data) => {
-                            rows.push([
-                                logsConnection.get().web3API.toUtf8(registered.args.id),
-                                registered.args.profile,
-                                resource,
-                                JSON.stringify(data.data),
-                                count
-                            ]);
-                            draw();
-                            count++;
+                            if(!errFinal){
+                                rows.push([
+                                    logsConnection.get().web3API.toUtf8(registered.args.id),
+                                    registered.args.profile,
+                                    resource,
+                                    JSON.stringify(data.data),
+                                    count
+                                ]);
+                                draw();
+                                count++;
+                            }else{
+                                console.log('error ', errFinal, logsConnection.get().web3API.toUtf8(registered.args.id));
+                            }
+
                         });
                     }
                 })
