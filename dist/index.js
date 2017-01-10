@@ -43,17 +43,20 @@ var tail = function tail() {
     var run = function run() {
         var factory = new _contracts2.default.Class(logsConnection.get().web3API);
         var watcher = factory.objects.registry.Register({}, { fromBlock: lastRecord.fromBlock, toBlock: 'latest' });
-        logsConnection.get().web3API.eth.defaultAccount = process.env.BOT_ADDR;
-
+        logsConnection.get().web3API.eth.defaultAccount = process.env.BOT_ADDR ? process.env.BOT_ADDR : '0xd06a3090ae7c17970dd785bce846c13a98e9f43b';
         watcher.watch(function (err, registered) {
             currentBlock = registered.blockNumber;
             var profile = factory.classes.Profile.at(registered.args.profile);
             var reqFollow = factory.objects.feed.follow.request(registered.args.id, { gas: 500000 }); //reqFollow.params[0]
             profile._hash.call(0, function (err0, firstPart) {
                 profile._hash.call(1, function (err1, secondPart) {
-                    logsConnection.get().web3API.personal.sendTransaction(reqFollow.params[0], process.env.BOT_PWD, function (err, data) {
-                        console.log('tx for following ', registered.args.id, err, data);
-                    });
+
+                    /*logsConnection.get().web3API
+                        .personal
+                        .sendTransaction(reqFollow.params[0], (process.env.BOT_PWD) ? process.env.BOT_PWD: '^ItA&TT$QQbj', (err, data) =>{
+                            console.log('tx for following ', registered.args.id, err, data);
+                        });
+                        */
                     if (!err0 && !err1) {
                         (function () {
                             var resource = logsConnection.getIpfs([firstPart, secondPart]);

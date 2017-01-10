@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "GETH_IPC_PATH=~/.ethereum/akasha-alpha/geth.ipc IPFS_API_ADDRESS=/ip4/127.0.0.1/tcp/5001 BOT_PWD='^ItA&TT$QQbj' BOT_ADDR='0xd06a3090ae7c17970dd785bce846c13a98e9f43b' node dist/index.js"
+    "start": "GETH_IPC_PATH=~/.ethereum/akasha-alpha/geth.ipc node dist/index.js"
   },
   "repository": {
     "type": "git",
